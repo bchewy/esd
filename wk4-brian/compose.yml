@@ -1,0 +1,46 @@
+version: "3"
+services:
+  book:
+    build: ./book
+    image: book:latest
+    ports:
+      - 5000:5000
+
+  order:
+    build: ./order
+    image: order:latest
+    ports:
+      - 5001:5001
+
+  shipping:
+    build: ./shipping
+    image: shipping:latest
+    ports:
+      - 5002:5002
+
+  activity:
+    build: ./activity
+    image: activity:latest
+    ports:
+      - 5003:5003
+
+  error:
+    build: ./error
+    image: error:latest
+    ports:
+      - 5004:5004
+
+  orchestrator:
+    build: ./orchestrator
+    image: orchestrator:latest
+    ports:
+      - 5100:5100
+
+  db:
+    build: ./db
+    image: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=order
+    ports:
+      - 3306:3306

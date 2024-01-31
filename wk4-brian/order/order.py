@@ -90,6 +90,9 @@ def get_all():
 @app.route("/order/<string:order_id>")
 def find_by_order_id(order_id):
     order = db.session.scalars(db.select(Order).filter_by(order_id=order_id).limit(1))
+    print("===============DEBUGGING ORDER======================")
+    print("Order", order)
+    print("=====================================")
     if order:
         return jsonify({"code": 200, "data": order.json()})
     return (

@@ -1,0 +1,64 @@
+  # book:
+  #   build: ./book
+  #   image: book:latest
+  #   ports:
+  #     - 5000:5000
+
+version: "3"
+services:
+  order:
+    build: ./order
+    image: order:wk5
+    ports:
+      - 5001:5001
+
+  shipping:
+    build: ./shipping
+    image: shipping:wk5
+    ports:
+      - 5002:5002
+
+  activity:
+    build: ./activity_log
+    image: activity:wk5
+    ports:
+      - 5003:5003
+
+  error:
+    build: ./error
+    image: error:wk5
+    ports:
+      - 5004:5004
+
+  placeorder:
+    build: ./place_order
+    image: placeorder:wk5
+    ports:
+      - 5100:5100
+
+  db:
+    build: ./db
+    image: db
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=order
+    ports:
+      - 3306:3306
+
+  python-script:
+    image: python:3.8
+    volumes:
+      - ./:/scripts
+    command: |
+      sh -c "pip install pika && python /scripts/amqp_setup.py"
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"

@@ -1,0 +1,36 @@
+aws --endpoint-url=http://localhost:4566 apigateway create-resource --rest-api-id YOUR_API_ID --parent-id YOUR_PARENT_ID --path-part 'test' --profile localstack
+
+# API G id
+137us325xz
+
+# p[arent id ]
+9m34jr6liu
+
+
+# Liusting end pints
+aws --endpoint-url=http://localhost:4566 apigateway get-resources --rest-api-id 137us325xz --profile localstack
+
+# Create a resource
+aws --endpoint-url=http://localhost:4566 apigateway create-resource --rest-api-id 137us325xz --parent-id 9m34jr6liu --path-part 'test' --profile localstack
+
+# resource id 
+n0jv5fzenr
+
+# Create a method
+aws --endpoint-url=http://localhost:4566 apigateway put-method --rest-api-id 137us325xz --resource-id n0jv5fzenr --http-method GET --authorization-type NONE --profile localstack
+
+# deploy API G
+aws --endpoint-url=http://localhost:4566 apigateway create-deployment --rest-api-id 137us325xz --stage-name dev --profile localstack
+
+
+# No integration error message!
+An error occurred (NotFoundException) when calling the CreateDeployment operation: No integration defined for method
+
+# Explaination:
+The error message youre encountering, No integration defined for method,indicates that although youve created a resource and a method for it, you havent defined an integration for this method. An integration is necessary because it tells API Gateway what to do when the method is called, such as invoking a Lambda function, connecting to an HTTP endpoint, or accessing a mock endpoint for testing purposes.
+
+# creating mock integraitn
+aws --endpoint-url=http://localhost:4566 apigateway put-integration --rest-api-id 137us325xz --resource-id n0jv5fzenr --http-method GET --type MOCK --request-templates '{"application/json": "{\"statusCode\": 200}"}' --profile localstack
+
+# mock repsonse
+aws --endpoint-url=http://localhost:4566 apigateway put-integration-response --rest-api-id 137us325xz --resource-id n0jv5fzenr --http-method GET --status-code 200 --response-templates '{"application/json": ""}' --profile localstack

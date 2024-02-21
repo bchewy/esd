@@ -3,7 +3,7 @@ volumes:
 
 networks:
   kong-net:
-    driver: bridge
+    driver: bridgeco
     name: kong-net
 
 services:
